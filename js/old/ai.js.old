@@ -1,0 +1,111 @@
+const isWin = (x, y, nb4Win) => {
+    x--
+    y--
+
+    let directionToCheck = []
+    let win = false
+    let nbAlign, previous
+    let matrice = setGameMatrice()
+    
+    directionToCheck.push(
+        horizontal(matrice, x, y, nb4Win),
+        vertical(matrice, x, y, nb4Win),
+        diagonal1(matrice, x, y, nb4Win),
+        diagonal2(matrice, x, y, nb4Win)
+    )
+
+    console.log(directionToCheck)
+
+    directionToCheck.forEach(direction => {
+        previous = null
+        direction.forEach(cell => {
+            if (!cell) {
+                (cell === previous) ? nbAlign++ : nbAlign = 1
+                if (nbAlign === nb4Win) win = true
+                previous = cell
+            }
+        })
+    });
+
+    return win
+}
+
+const horizontal = (matrice, x, y, nb4Win) => {
+    let back = []
+    let forward = []
+
+    for (let i = 1; i < nb4Win && y + i <= matrice[0].length - 1; i++) {
+        forward.push(matrice[x][y + i])
+    }
+
+    for (let i = 1; i < nb4Win && y - i >= 0; i++) {
+        back.unshift(matrice[x][y - i])
+    }
+
+    return [...back, matrice[x][y], ...forward]
+}
+
+const vertical = (matrice, x, y, nb4Win) => {
+    let back = []
+    let forward = []
+
+    for (let i = 1; i < nb4Win && x + i <= matrice.length - 1; i++) {
+        forward.push(matrice[x + i][y])
+    }
+
+    for (let i = 1; i < nb4Win && x - i >= 0; i++) {
+        back.unshift(matrice[x - i][y])
+    }
+
+    return [...back, matrice[x][y], ...forward]
+}
+
+const diagonal1 = (matrice, x, y, nb4Win) => {
+    let back = []
+    let forward = []
+
+    for (let i = 1; i < nb4Win && x + i <= matrice.length - 1 && y + i <= matrice[0].length - 1 ; i++) {
+        forward.push(matrice[x + i][y + i])
+    }
+
+    for (let i = 1; i < nb4Win && x - i >= 0 && y - i >= 0; i++) {
+        back.unshift(matrice[x - i][y - i])
+    }
+
+    return [...back, matrice[x][y], ...forward]
+}
+
+const diagonal2 = (matrice, x, y, nb4Win) => {
+    let back = []
+    let forward = []
+
+    for (let i = 1; i < nb4Win && x + i <= matrice.length - 1 && y - i >= 0 ; i++) {
+        forward.push(matrice[x + i][y - i])
+    }
+
+    for (let i = 1; i < nb4Win && x - i >= 0 && y + i <= matrice[0].length - 1 ; i++) {
+        back.unshift(matrice[x - i][y + i])
+    }
+
+    return [...back, matrice[x][y], ...forward]
+}
+
+const playAi = (level = 1, matrice = setAiMatrice()) => {
+    if (level >= maxLevel) return false
+}
+
+const setGameMatrice = () => {
+    let matrice = [], tRow
+
+    for (let i = 1 ; i <= row ; i++) {
+        tRow = []
+
+        for (let j = 1 ; j <= col ; j++) {
+            cell = document.querySelector(`[data-col="${j}"][data-row="${i}"]`)
+            tRow.push(cell.dataset.state)
+            if (j === col) matrice.push(tRow)
+        }
+
+        if (i === row) return matrice
+    }
+}

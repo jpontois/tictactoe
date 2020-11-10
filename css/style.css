@@ -1,0 +1,156 @@
+@font-face {
+    font-family: 'Material Icons';
+    font-style: normal;
+    font-weight: 400;
+    src: url(https://example.com/MaterialIcons-Regular.eot); /* For IE6-8 */
+    src: local('Material Icons'),
+      local('MaterialIcons-Regular'),
+      url(https://example.com/MaterialIcons-Regular.woff2) format('woff2'),
+      url(https://example.com/MaterialIcons-Regular.woff) format('woff'),
+      url(https://example.com/MaterialIcons-Regular.ttf) format('truetype');
+}
+
+:root {
+    --grillSize: 40vw;
+    --nbCells: 3;
+    --cellsSize: calc((var(--grillSize) - 2vw * var(--nbCells))/var(--nbCells));
+    --pawnSize: calc(var(--cellsSize) * 0.8);
+    --cellColor: #b11937;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    height: 100vh;
+    width: 100vw;
+    position: absolute;
+    top: 0;
+    left: 0;
+    overflow: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: helvetica;
+    font-weight: lighter;
+}
+
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 100vw;
+    background: rgb(0,0,0,0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;    
+}
+
+.mainCont {
+    padding: 0 50px;
+    text-align: center;
+}
+
+.material {
+    font-family: 'Material Icons';
+    font-weight: normal;
+    font-style: normal;
+    display: inline-block;
+    text-transform: none;
+    letter-spacing: normal;
+    word-wrap: normal;
+    white-space: nowrap;
+    direction: ltr;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    -moz-osx-font-smoothing: grayscale;
+    font-feature-settings: 'liga';
+}
+
+.config {
+    margin-bottom: 30px;
+}
+
+.params {
+    margin-bottom: 10px;
+}
+
+.config input {
+    float: right;
+    margin-left: 10px;
+    width: 100px;
+    padding-left: 5px;
+}
+
+.config button {
+    width: 100%;
+    padding: 4px;
+    cursor: pointer;
+}
+
+.grill {
+    width: var(--grillSize);
+}
+
+.cell {
+    height: var(--cellsSize);
+    width: var(--cellsSize);
+    font-size: var(--pawnSize);
+    margin: 1vw;
+    line-height: var(--cellsSize);
+    float: left;
+    cursor: pointer;
+    text-align: center;
+    background: var(--cellColor);
+    border-radius: 10px;
+    user-select: none;
+    transition-duration: 0.2s;
+    color: white;
+}
+
+.cell[data-state="0"]:hover {
+    transform: scale(0.9);
+}
+
+.lastPlay {
+    background: rgb(0,0,0,0.7);
+}
+
+.undo {
+    width: calc(var(--grillSize) / 2);
+    padding: 4px;
+    margin: 10px 0 20px;
+    cursor: pointer;
+}
+
+.cont p, .cont i {
+    display: inline-block;
+}
+
+.cont i {
+    font-size: 25px;
+    margin-right: 10px;
+}
+
+.cont span {
+    margin: 15px 30px;
+    display: flex;
+    align-items: center;
+    justify-content: left;
+}
+
+#p1Cont, #p2Cont {
+    font-size: 24px;
+    font-weight: normal;
+}
+
+#p1Cont {
+    color: #b11937;
+}
+
+#p2Cont {
+    color: #3865aa;
+}

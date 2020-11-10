@@ -1,0 +1,162 @@
+const generate = document.querySelector('#generate')
+const grill = document.querySelector('#grill')
+const undo = document.querySelector('#undo')
+const p1 = document.querySelector('#p1')
+const p2 = document.querySelector('#p2')
+const root = document.documentElement
+
+const p1_pawn = 'clear'
+const p2_pawn = 'panorama_fish_eye'
+const p1_color = '#b11937'
+const p2_color = '#3865aa'
+
+let lengthToWin = 3
+let currentPlayer = false
+let historic = 1
+let row, col, p1_name, p2_name, nbToWin
+
+const generateGame = () => {
+    row = document.querySelector('#row').value * 1
+    col = document.querySelector('#col').value * 1
+    p1_name = document.querySelector('#p1_name').value
+    p2_name = document.querySelector('#p2_name').value
+    nbToWin = document.querySelector('#toWin').value * 1
+
+    p1.innerText = p1_name
+    p2.innerText = p2_name
+    currentPlayer = false
+    root.style.setProperty('--cellColor', p1_color)
+
+    grill.innerHTML = ''
+
+    root.style.setProperty('--nbCells', col)
+    
+    for (let i = 1; i <= row; i++) {
+        for (let j = 1; j <= col; j++) {
+            createCell(i, j)
+        }
+    }
+}
+
+const createCell = (row, col) => {
+    cell = document.createElement('div')
+    cell.classList.add('cell', 'material')
+    cell.dataset.row = row
+    cell.dataset.col = col
+    cell.dataset.historic = ''
+    cell.dataset.state = 0
+
+    cell.addEventListener('click', event => {
+        const cell = event.path[0]
+        let pawn, color
+
+        (!currentPlayer) ? pawn = p1_pawn : pawn = p2_pawn;
+        (currentPlayer) ? color = p1_color : color = p2_color;
+
+        if (cell.dataset.state * 1 === 0) {
+            cell.innerHTML = pawn
+            cell.dataset.state = currentPlayer + 1
+            cell.dataset.historic = historic
+            root.style.setProperty('--cellColor', color)
+            historic++
+            currentPlayer = !currentPlayer
+            const last = document.querySelector('.lastPlay')
+            if (last) last.classList.remove("lastPlay");
+            cell.classList.add("lastPlay");
+        }
+    })
+
+    grill.appendChild(cell)
+}
+
+undo.addEventListener('click', () => {
+    if (historic > 1) {
+        let toUndo = document.querySelectorAll(`[data-historic="${historic - 1}"]`)[0]
+        toUndo.dataset.historic = ''
+        toUndo.dataset.state = 0
+        toUndo.innerHTML = ''
+        historic--
+    }
+})
+
+generate.addEventListener('click', () => generateGame())
+
+const checkWin = (cell) => {
+    let x = cell.dataset.col * 1
+    let y = cell.dataset.row * 1
+    let directionToCheck = []
+    let win = false
+    let nbAlign, previous
+
+    directionToCheck.push(getHorizontalCells(x, y))
+    directionToCheck.push(getVerticalCells(x, y))
+    directionToCheck.push(getDiagonal1Cells(x, y))
+    directionToCheck.push(getDiagonal2Cells(x, y))
+
+    directionToCheck.forEach(direction => {
+        previous = null
+        direction.forEach(cell => {
+            if (null != cell) {
+                (cell.dataset.state === previous) ? nbAlign++ : nbAlign = 1
+                if (nbAlign === nbToWin) win = true
+                previous = cell.dataset.state
+            }
+        })
+    });
+
+    return win
+}
+
+const getHorizontalCells = (x, y) => {
+    let back = []
+    let forward = []
+    let current = document.querySelector(`[data-col="${x}"][data-row="${y}"]`)
+
+    for (let i = 1; i < nbToWin; i++) {
+        forward.push(document.querySelector(`[data-col="${x}"][data-row="${y + i}"]`))
+        back.unshift(document.querySelector(`[data-col="${x}"][data-row="${y - i}"]`))
+    }
+
+    return [...back, current, ...forward]
+}
+
+const getVerticalCells = (x, y) => {
+    let back = []
+    let forward = []
+    let current = document.querySelector(`[data-col="${x}"][data-row="${y}"]`)
+
+    for (let i = 1; i < nbToWin; i++) {
+        forward.push(document.querySelector(`[data-col="${x + i}"][data-row="${y}"]`))
+        back.unshift(document.querySelector(`[data-col="${x - i}"][data-row="${y}"]`))
+    }
+
+    return [...back, current, ...forward]
+}
+
+const getDiagonal1Cells = (x, y) => {
+    let back = []
+    let forward = []
+    let current = document.querySelector(`[data-col="${x}"][data-row="${y}"]`)
+
+    for (let i = 1; i < nbToWin; i++) {
+        forward.push(document.querySelector(`[data-col="${x + i}"][data-row="${y + i}"]`))
+        back.unshift(document.querySelector(`[data-col="${x - i}"][data-row="${y - i}"]`))
+    }
+
+    return [...back, current, ...forward]
+}
+
+const getDiagonal2Cells = (x, y) => {
+    let back = []
+    let forward = []
+    let current = document.querySelector(`[data-col="${x}"][data-row="${y}"]`)
+
+    for (let i = 1; i < nbToWin; i++) {
+        forward.push(document.querySelector(`[data-col="${x + i}"][data-row="${y - i}"]`))
+        back.unshift(document.querySelector(`[data-col="${x - i}"][data-row="${y + i}"]`))
+    }
+
+    return [...back, current, ...forward]
+}
+
+generateGame()

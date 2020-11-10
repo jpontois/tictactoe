@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Tic tac toe</title>
+        <link rel="stylesheet" type="text/css" href="css/style.css">
+        <link rel="stylesheet" type="text/css" href="css/loader.css">
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    </head>
+    <body>
+        <div id="overlay" class="loaderCover">
+            <div class="loader">
+                <div class="loader1"></div>
+                <div class="loader2"></div>
+                <div class="loader3"></div>                          
+            </div>
+        </div>
+        <div class="mainCont">
+            <div id="grill" class="grill"></div>
+            <button id="undo" class="undo">Undo</button>
+        </div>
+
+        <div class="mainCont">
+            <div class="config">
+                <div class="params">
+                    <label>Rows</label>
+                    <input id="row" type="number" value="5">
+                </div>
+                <div class="params">
+                    <label>Columns</label>
+                    <input id="col" type="number" value="5">
+                </div>
+                <div class="params">
+                    <label>Nb to win</label>
+                    <input id="toWin" type="number" value="4">
+                </div>
+                <div class="params">
+                    <label>Player 1</label>
+                    <input id="p1_name" type="text" value="Jon">
+                </div>
+                <div class="params">
+                    <label>Player 2</label>
+                    <input id="p2_name" type="text" value="AI">
+                </div>
+                <div class="params">
+                    <label>Play vs IA</label>
+                    <input id="gameVsAi" type="checkbox" checked>
+                </div>
+                <button id="generate" class="generate">Commencer la partie</button>
+            </div>
+    
+            <div class="cont">
+                <span id="p1Cont" class="player">
+                    <i class="material">clear</i>
+                    <p id="p1"></p>
+                </span>
+                <span id="p2Cont" class="player">
+                    <i class="material">panorama_fish_eye</i>
+                    <p id="p2"></p>
+                </span>
+                <span id="winner"></span>
+            </div>
+        </div>
+
+        <script src="js/generateGame.js"></script>
+        <script src="js/checkWin.js"></script>
+        <script src="js/ai.js"></script>
+    </body>
+</html>
+
